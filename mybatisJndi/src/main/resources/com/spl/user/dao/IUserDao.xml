@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 该文件代表的是类和表的映射关系，关于表的sql语句等等写在这里 -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spl.user.dao.IUserDao">
+
+    <resultMap id="userMap" type="com.spl.user.domain.UserDiffProperty">
+        <!-- 主键对应关系 -->
+        <id property="userId" column="id"></id>
+        <!-- 非主键对应关系 -->
+        <result property="userName" column="username"></result>
+        <result property="userAddress" column="address"></result>
+        <result property="userBirthday" column="birthday"></result>
+        <result property="userSex" column="sex"></result>
+    </resultMap>
+
+    <sql id="defaultUser">
+        select * from user
+    </sql>
+
+    <!-- 配置查询所有 -->
+    <select id="findAll" resultType="user">
+        select * from user
+    </select>
+
+    <!-- 配置保存 -->
+    <insert id="saveUser" parameterType="com.spl.user.domain.User">
+        <selectKey keyProperty="id" keyColumn="id" resultType="int" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        INSERT INTO USER
+        (username, birthday, sex, address)
+        VALUES
+        (#{username},#{birthday},#{sex},#{address})
+    </insert>
+
+    <!-- 配置修改 -->
+    <update id="updateUser" parameterType="com.spl.user.domain.User">
+        Update user
+        set
+        username = #{username},
+        birthday = #{birthday},
+        sex = #{sex},
+        address = #{address}
+        where
+        id = #{id}
+    </update>
+
+    <!-- 配置保存 -->
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        delete from user where id = #{uid}
+    </delete>
+
+    <!-- 配置查询一个操作 -->
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.spl.user.domain.User">
+        select * from user where id = #{uid}
+    </select>
+
+    <!-- 配置模糊查询 -->
+    <select id="findByName" parameterType="java.lang.String" resultType="com.spl.user.domain.User">
+        select * from user where username like #{username}
+    </select>
+
+    <!-- 配置查询用户数 -->
+    <select id="findUserTotal" resultType="java.lang.Integer">
+        select count(1) from user
+    </select>
+
+    <!-- 配置实体类查询-->
+    <select id="findByQueryVo" parameterType="com.spl.user.domain.QueryVo" resultType="com.spl.user.domain.User">
+        select * from user where username like #{user.username}
+    </select>
+
+    <!-- 配置查询所有_实体类属性与数据库字段不对应 -->
+    <select id="findDiffPropertyAll" resultType="com.spl.user.domain.UserDiffProperty">
+        select id as userId , username as userName , address as userAddress , sex as userSex , birthday as userBirthday from user
+    </select>
+
+    <!-- 配置查询所有_实体类属性与数据库字段不对应 -->
+    <select id="findDiffPropertyAll2" resultMap="userMap">
+        select * from user
+    </select>
+
+    <!-- 配置条件查询 -->
+    <select id="findUserByCondition" resultMap="userMap" parameterType="com.spl.user.domain.UserDiffProperty">
+<!--        select * from user where 1=1-->
+<!--        <if test="userName != null">-->
+<!--            AND username = #{userName}-->
+<!--        </if>-->
+            select * from user
+            <where>
+                <if test="userName != null">
+                    AND username = #{userName}
+                </if>
+            </where>
+    </select>
+
+    <!-- 配置查询所有_实体类属性与数据库字段不对应 -->
+    <select id="findUserByInIds" resultMap="userMap" parameterType="QueryVo">
+        <!-- select * from user -->
+        <include refid="defaultUser" />
+        <where>
+            <if test="ids != null and ids.size() > 0">
+                <foreach collection="ids" open=" and id in(" close=")" item="uid" separator=",">
+                    #{uid}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

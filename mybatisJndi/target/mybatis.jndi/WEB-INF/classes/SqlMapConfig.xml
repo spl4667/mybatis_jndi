@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- .DTD文件是xml格式文件的约束文件，它约束了该xml文件使用的标签以及标签之间的关系 -->
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- 配置properties -->
+    <properties resource="jdbcConfig.properties">
+<!--        <property name="driver" value="com.mysql.jdbc.Driver"/>-->
+<!--        <property name="url" value="jdbc:mysql://192.168.157.128:3306/mybatis?characterEncoding=UTF-8"/>-->
+<!--        <property name="username" value="hzero"/>-->
+<!--        <property name="password" value="hzero"/>-->
+    </properties>
+    <!-- typeAliases配置别名，它只能配置domain中类的别名 -->
+    <typeAliases>
+        <!-- type属性指定的是实体类全限定类名。 alias属性指定别名，当指定了别名就不在区分大小写 -->
+<!--        <typeAlias type="com.spl.user.domain.User" alias="user"></typeAlias>-->
+
+        <!-- 用于指定要配置别名的包，当指定之后，该包下所有的类都会注册别名，并且类名就是别名，且不区分大小写 -->
+        <package name="com.spl.user.domain"/>
+        <package name="com.spl.account.domain"/>
+    </typeAliases>
+
+    <!-- 配置环境 -->
+    <environments default="mysql">
+        <!-- 配置mysql的环境-->
+        <environment id="mysql">
+            <!-- 配置事务的类型-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!-- 配置数据源(连接池)-->
+            <dataSource type="JNDI">
+                <!-- 配置连接数据库的4个基本信息-->
+                <property name="data_source" value="java:comp/env/jdbc/mybatisJndi"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 指定映射配置文件(每个dao独立的配置文件)的位置-->
+    <mappers>
+<!--        <mapper resource="com/spl/user/dao/IUserDao.xml"/>-->
+        <!--  用于指定dao接口所在的包，当指定之后就不需要再写mapple或者resource或者class了-->
+        <package name="com.spl.user.dao"/>
+        <package name="com.spl.account.dao"/>
+<!--        <mapper resource="com/spl/account/dao/IAccountDao.xml"/>-->
+    </mappers>
+</configuration>

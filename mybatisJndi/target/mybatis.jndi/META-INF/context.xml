@@ -1,0 +1,28 @@
+<Context>
+    <!--
+    <Resource
+    name="jdbc/books" //引用名可以自定义
+    auth="Container" //指定管理DataSource的Manager
+    type="javax.sql.DataSource" //指定包名
+    maxActive="100" //最大可活动量
+    maxIdle="30" //最大空限量
+    maxWait="10000" //最大等待时间
+    username="sa" //用户
+    password="sa" //密码
+    driverClassName="com.microsoft.jdbc.sqlserver.SQLServerDrier";//连接的驱动类
+    url="jdbc:sqlserver://localhost:1433;DatabaseName="books"//连接的URL
+    />
+    -->
+    <Resource
+    name="jdbc/mybatisJndi"
+    auth="Container"
+    type="javax.sql.DataSource"
+    maxActive="100"
+    maxIdle="30"
+    maxWait="10000"
+    username="hzero"
+    password="hzero"
+    driverClassName="com.mysql.jdbc.Driver"
+    url="jdbc:mysql://192.168.157.128:3306/mybatis?characterEncoding=UTF-8"
+    />
+</Context>
